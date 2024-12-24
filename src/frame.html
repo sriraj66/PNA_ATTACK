@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Current URL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 20%;
+        }
+        #urlDisplay {
+            font-size: 1.2em;
+            color: #333;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Current URL</h1>
+    <div id="urlDisplay">Fetching URL...</div>
+
+    <script>
+        const urlDisplay = document.getElementById('urlDisplay');
+        const currentURL = window.location.href;
+        urlDisplay.textContent = currentURL;
+    </script>
+</body>
+</html>
