@@ -6,17 +6,26 @@
 </head>
 <body>
     <h1>Attacker Interface</h1>
+    <textarea name="" id="logs"></textarea>
     <button id="attack">Send Request</button>
     <script>
-        document.getElementById('attack').addEventListener('click', function() {
-            fetch('http://0.0.0.0:3000/',{mode:"no-cors"})
+        document.addEventListener("DOMContentLoaded", function() {
+            try{
+                fetch('http://0.0.0.0:3030/',{mode:"no-cors"})
                 .then(async response => {
                     console.log(response);
-                    alert("Res Recived")
+
+                    document.getElementById("logs").value = "Request Sent"
                     
-                }
-            ).catch(err=>{console.error(err);
-            })
+                }).catch((err)=>{
+                    throw err
+                })
+
+            }catch(err){
+                document.getElementById("logs").value = err.message
+            }
+            
+
         });
     </script>
 </body>

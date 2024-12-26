@@ -3,7 +3,8 @@ import cors from "cors"
 
 const app = express();
 
-app.use(cors())
+
+app.use(cors());
 
 app.use((req, res, next) => {
     console.log(`Received request from IP: ${req.ip}`);
@@ -21,6 +22,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.listen(3000, '0.0.0.0', () => {
-    console.log('Server listening on localhost at port 3000...');
+app.listen(3030, '0.0.0.0', () => {
+    console.log('Server listening on localhost at port 3030...');
 });
