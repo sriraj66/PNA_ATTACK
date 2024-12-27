@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attacker Page</title>
+</head>
+<body>
+    <h1>Attacker Interface</h1>
+    <textarea name="" id="logs"></textarea>
+    <a href="./0_.html">0.0.0.0</a>
+    <a href="./127_.html">127.0.0.1</a>
+    <a href="./waterfall.html">waterfall</a>
+    <button id="attack">Send Request</button>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            try{
+                fetch('http://apple.com',{mode:"no-cors"})
+                .then(async response => {
+                    console.log(response);
+                    console.log("Responce Recived")
+                    document.getElementById("logs").value = "Request Sent"
+                    
+                }).catch((err)=>{
+                    console.log(err.message)
+                    throw err
+                })
+
+            }catch(err){
+                console.log(err.message)
+                document.getElementById("logs").value = err.message
+            }
+            
+
+        });
+    </script>
+</body>
+</html>
